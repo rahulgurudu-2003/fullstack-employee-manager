@@ -2,6 +2,8 @@
 
 An enterprise-grade, full-stack Employee Management System featuring secure JWT-based authentication, role-based access control (RBAC), organizational reporting tree visualization, and detailed department analytics.
 
+![EMS Dashboard](frontend/src/assets/HomePage.png)
+
 ---
 
 ## 🚀 Key Features
