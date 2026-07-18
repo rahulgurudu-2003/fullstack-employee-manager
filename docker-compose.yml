@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: ems-postgres
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Rahul@daily1
+      POSTGRES_DB: ems
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+
+  backend:
+    build: ./backend
+    container_name: ems-backend
+    restart: always
+    ports:
+      - "5000:5000"
+    environment:
+      - PORT=5000
+      - DATABASE_URL=postgresql://postgres:Rahul%40daily1@db:5432/ems?schema=public
+      - JWT_SECRET=supersecretemskeyjwt123!
+      - JWT_EXPIRES_IN=1d
+      - NODE_ENV=production
+    depends_on:
+      - db
+    command: >
+      sh -c "npx prisma db push --accept-data-loss && npm run seed && npm start"
+
+  frontend:
+    build: ./frontend
+    container_name: ems-frontend
+    restart: always
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+
+volumes:
+  pg-data:
+    driver: local
