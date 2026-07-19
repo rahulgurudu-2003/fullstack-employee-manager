@@ -1,7 +1,8 @@
 import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import { connectDB } from './config/db';
+import { connectDB, prisma } from './config/db';
+import { execSync } from 'child_process';
 import authRoutes from './routes/authRoutes';
 import employeeRoutes from './routes/employeeRoutes';
 import organizationRoutes from './routes/organizationRoutes';
@@ -38,6 +39,23 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
 
 const startServer = async () => {
   await connectDB();
+
+  // Run Prisma database push and seeding automatically on startup in production
+  if (process.env.NODE_ENV === 'production') {
+    try {
+      console.log('Running automatic database schema sync (Prisma)...');
+      execSync('npx prisma db push --accept-data-loss', { stdio: 'inherit' });
+      
+      const count = await prisma.employee.count();
+      if (count === 0) {
+        console.log('No employees found. Seeding initial accounts...');
+        execSync('node dist/config/seed.js', { stdio: 'inherit' });
+      }
+    } catch (error: any) {
+      console.error('Automatic database setup failed:', error.message);
+    }
+  }
+
   app.listen(PORT, () => {
     console.log(`Server is running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`);
   });
