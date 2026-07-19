@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import { useAuth } from '../context/AuthContext';
-import { Sun, Moon, Bell, Search, ChevronDown, User, Power } from 'lucide-react';
+import { Sun, Moon, Bell, Search, ChevronDown, User, Power, Menu } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 interface HeaderProps {
   title: string;
+  onMenuClick?: () => void;
 }
 
 const Header: React.FC<HeaderProps> = ({ title }) => {
@@ -79,8 +80,15 @@ const Header: React.FC<HeaderProps> = ({ title }) => {
   };
 
   return (
-    <header className="h-20 bg-white dark:bg-dark-card border-b border-gray-200 dark:border-dark-border px-8 flex items-center justify-between transition-all duration-300">
-      <div className="flex items-center gap-8 flex-1">
+    <header className="h-20 bg-white dark:bg-dark-card border-b border-gray-200 dark:border-dark-border px-4 md:px-8 flex items-center justify-between transition-all duration-300">
+      <div className="flex items-center gap-4 md:gap-8 flex-1">
+        <button
+          onClick={onMenuClick}
+          className="lg:hidden p-2 rounded-xl text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-all cursor-pointer mr-1"
+          title="Open Sidebar"
+        >
+          <Menu className="w-5 h-5" />
+        </button>
         <div>
           <h2 className="text-sm font-extrabold text-gray-800 dark:text-white uppercase tracking-wider">{title}</h2>
         </div>

@@ -10,10 +10,16 @@ import {
   FileText,
   Settings,
   ShieldCheck,
-  UserCheck
+  UserCheck,
+  X
 } from 'lucide-react';
 
-const Sidebar: React.FC = () => {
+interface SidebarProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   const { logout, user } = useAuth();
   const location = useLocation();
 
@@ -58,15 +64,26 @@ const Sidebar: React.FC = () => {
   const links = getLinks();
 
   return (
-    <aside className="w-64 bg-white dark:bg-dark-card border-r border-gray-100 dark:border-dark-border h-screen sticky top-0 flex flex-col justify-between transition-all duration-300">
-      <div className="py-4 px-5 border-b border-gray-50 dark:border-dark-border flex items-center gap-3">
-        <div className="bg-blue-50 dark:bg-blue-950/40 p-2.5 rounded-xl text-[#2563EB] dark:text-blue-400 flex items-center justify-center shadow-sm">
-          <Users className="w-5 h-5" />
+    <aside className={`fixed lg:sticky top-0 left-0 z-50 h-screen w-64 bg-white dark:bg-dark-card border-r border-gray-100 dark:border-dark-border flex flex-col justify-between transition-transform duration-300 lg:translate-x-0 ${
+      isOpen ? 'translate-x-0' : '-translate-x-full'
+    }`}>
+      <div className="py-4 px-5 border-b border-gray-50 dark:border-dark-border flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="bg-blue-50 dark:bg-blue-950/40 p-2.5 rounded-xl text-[#2563EB] dark:text-blue-400 flex items-center justify-center shadow-sm">
+            <Users className="w-5 h-5" />
+          </div>
+          <div>
+            <h1 className="font-black text-base text-[#2563EB] dark:text-blue-400 tracking-wider leading-none">EMS</h1>
+            <span className="text-[9px] text-[#64748B] dark:text-gray-455 font-bold uppercase tracking-wider">Management System</span>
+          </div>
         </div>
-        <div>
-          <h1 className="font-black text-base text-[#2563EB] dark:text-blue-400 tracking-wider leading-none">EMS</h1>
-          <span className="text-[9px] text-[#64748B] dark:text-gray-455 font-bold uppercase tracking-wider">Management System</span>
-        </div>
+        <button
+          onClick={onClose}
+          className="lg:hidden p-2 rounded-xl text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-all cursor-pointer"
+          title="Close Sidebar"
+        >
+          <X className="w-5 h-5" />
+        </button>
       </div>
 
       <nav className="flex-1 p-3 space-y-0.5 overflow-y-auto scrollbar-none">

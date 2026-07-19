@@ -34,6 +34,11 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) =
 const LayoutWrapper: React.FC = () => {
   const location = useLocation();
   const { user } = useAuth();
+  const [sidebarOpen, setSidebarOpen] = React.useState(false);
+
+  React.useEffect(() => {
+    setSidebarOpen(false);
+  }, [location.pathname, location.search]);
   
   const getPageTitle = () => {
     switch (location.pathname) {
@@ -57,11 +62,19 @@ const LayoutWrapper: React.FC = () => {
   };
 
   return (
-    <div className="flex bg-[#F8FAFC] dark:bg-dark-bg min-h-screen transition-colors duration-300">
-      <Sidebar />
+    <div className="flex bg-[#F8FAFC] dark:bg-dark-bg min-h-screen transition-colors duration-300 relative">
+      {/* Sidebar Overlay Backdrop on Mobile */}
+      {sidebarOpen && (
+        <div 
+          className="fixed inset-0 bg-black/45 backdrop-blur-[2px] z-40 lg:hidden transition-all duration-300"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
 
-      <div className="flex-1 flex flex-col overflow-hidden">
-        <Header title={getPageTitle()} />
+      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+
+      <div className="flex-1 flex flex-col overflow-hidden w-full">
+        <Header title={getPageTitle()} onMenuClick={() => setSidebarOpen(true)} />
 
         <main className="flex-1 overflow-y-auto bg-[#F8FAFC]/50 dark:bg-dark-bg/50">
           <Routes>
