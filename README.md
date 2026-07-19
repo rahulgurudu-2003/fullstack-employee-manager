@@ -6,6 +6,13 @@ An enterprise-grade, full-stack Employee Management System featuring secure JWT-
 
 ---
 
+## 🌐 Live Deployment
+
+*   **Live Web Portal (Vercel)**: [https://fullstack-employee-manager.vercel.app/](https://fullstack-employee-manager.vercel.app/)
+*   **Live API Server (Render)**: [https://fullstack-employee-manager.onrender.com](https://fullstack-employee-manager.onrender.com)
+
+---
+
 ## 🚀 Key Features
 
 *   **Secure Authentication**: Stateful JWT with bcrypt-hashed credentials and token validation.
